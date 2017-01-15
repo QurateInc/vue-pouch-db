@@ -1,0 +1,32 @@
+{
+  "name": "vue-pouch-db",
+  "version": "1.0.0",
+  "description": "Vue bindings for PouchDB/CouchDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "prepublish": "buble src/index.js --output index.js"
+  },
+  "keywords": [
+    "vue",
+    "pouchdb",
+    "couchdb",
+    "pouch",
+    "couch",
+    "vue-couchdb",
+    "vue-couch-db",
+    "vue-couchdb",
+    "vue-couch-db",
+    "vue-pouch"
+  ],
+  "author": "Sadi Qevani",
+  "license": "MIT",
+  "dependencies": {
+    "pouchdb-browser": "^6.1.1"
+  },
+  "devDependencies": {
+    "buble": "^0.15.2",
+    "mocha": "^3.2.0",
+    "vue": "^2.1.8"
+  }
+}
