@@ -2,6 +2,7 @@
   "name": "vue-pouch-db",
   "version": "1.0.0",
   "description": "Vue bindings for PouchDB/CouchDB",
+  "repository": "https://github.com/sadiqevani/vue-pouch-db.git"
   "main": "index.js",
   "scripts": {
     "test": "mocha",

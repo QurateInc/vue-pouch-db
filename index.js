@@ -23,8 +23,13 @@ module.exports = {
     /**
      * Remove DBs
      */
-    Vue.prototype.$removedb = function (name) {
-      return delete this$1.databases[name];
+    Vue.prototype.$closedb = function (name) {
+      return this$1.databases[name].close(function (error) {
+        if (error) {
+          throw new Error(error);
+        }
+        return delete this$1.databases[name];
+      });
     };
 
     /**
