@@ -24,7 +24,10 @@ class Bucket {
     ];
 
     // Internal Variables
-    this._dbs = {};
+    this._dbs   = {};
+    this._state = {};
+
+    // Maybe later!
     this._vms = new Vue({data() {
       const dataSchema = {};
       for (const dbname in schema) {
@@ -97,7 +100,10 @@ class Bucket {
     // Init DB
     this._dbs[dbname] = new PouchDB(dbname, config.options);
 
-
+    // Populate state with data
+    this._dbs[dbname].allDocs({ include_docs: true }).then((data) => {
+      return Vue.set(this._state, dbname, data);
+    });
 
     // Sync DB
     PouchDB.sync(
@@ -105,8 +111,23 @@ class Bucket {
       `${config.remote}/${dbname}`,
       config.sync
     ).on("change", (state) => {
-      state.change.docs.forEach(() => {
+      state.change.docs.forEach((changedDoc) => {
+        this._state[dbname].rows.forEach((doc, index) => {
+          if (doc.id === changedDoc._id) {
 
+            delete changedDoc._revisions;
+
+            Vue.set(this._state[dbname].rows, index, {
+              id: changedDoc._id,
+              key: changedDoc._id,
+              value: {
+                rev: changedDoc._rev
+              },
+              doc: changedDoc
+            });
+
+          }
+        });
       });
     });
 
@@ -144,6 +165,9 @@ export default {
     // Making Vue globally available
     Vue = $Vue;
 
+    // Get Util Functions
+    const { defineReactive } = $Vue.util;
+
     // Check Version Number
     const version = Number(Vue.version.split('.')[0]);
 
@@ -174,6 +198,8 @@ export default {
       if (options.bucket) {
         // Getting the core $bucket
         this.$bucket = options.bucket;
+        // Define Reactive state
+        defineReactive(this.$bucket, '_state', options.bucket._state);
       } else if (options.parent && options.parent.$bucket) {
         // Getting parent bucket
         this.$bucket = options.parent.$bucket;
