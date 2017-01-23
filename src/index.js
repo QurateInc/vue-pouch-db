@@ -114,9 +114,10 @@ class Bucket {
       state.change.docs.forEach((changedDoc) => {
         this._state[dbname].rows.forEach((doc, index) => {
           if (doc.id === changedDoc._id) {
-
+            // We don't need Revisions here!
             delete changedDoc._revisions;
 
+            // Setting Reactivity and updating the DB
             Vue.set(this._state[dbname].rows, index, {
               id: changedDoc._id,
               key: changedDoc._id,
@@ -125,7 +126,6 @@ class Bucket {
               },
               doc: changedDoc
             });
-
           }
         });
       });

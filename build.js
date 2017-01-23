@@ -49,7 +49,7 @@ const bucket = new VuePouch.Bucket({
     },
 
     changes: {
-      since: 'now',
+      since: 0,
       live: true,
       include_docs: true
     },
