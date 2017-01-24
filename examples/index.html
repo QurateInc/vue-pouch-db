@@ -8,9 +8,16 @@
 </head>
 <body>
 <div id="app">
-  <pre><code>{{ $bucket.state }}</code></pre>
-  <br />
-  <pre><code>{{ $bucket._state }}</code></pre>
+  <pre>
+    <code>
+      {{ projects }}
+    </code>
+  </pre>
+  <ul>
+    <li v-for="project in projects">
+      <a :href="project._id">{{ project.name }}</a>
+    </li>
+  </ul>
 </div>
 <script src="../dist/build.js"></script>
 </body>

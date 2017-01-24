@@ -9,34 +9,64 @@ const bucket = new VuePouch.Bucket({
     // Remote Server
     remote: "https://db.qurate.site:6984",
 
-    // Pouch.sync config
+    // db.allDocs({options})
+    allDocs: {
+      include_docs: true
+    },
+
+    // Pouch.sync config for every Instance
     sync: {
       live:  true,
       retry: true
     },
 
-    // DB Global Options
+    // Options for every new PouchDB instance
     options: {
       ajax: {
         cache: true
       }
-    }
+    },
+
+    // db.changes().on($events)
+    onChanges(change) {
+      console.log(change);
+    },
+    onPaused() {},
+    onActive() {},
+    onDenied() {},
+    onComplete() {},
+    onError() {},
+    cancel(cancel) {}
   },
 
   plugins: [],
 
   _users: {
-    remoteOnly: true
+    // Is remote only ?
+    remoteOnly: true,
 
+    // new PouchDB: Options
+    options: {
+
+    }
   },
   projects: {
     // Remote Server
     remote: "https://db.qurate.site:6984",
 
+    // new PouchDB: Options
     options: {
-
+      ajax: {
+        cache: true
+      }
     },
 
+    // db.allDocs({options})
+    allDocs: {
+      include_docs: true
+    },
+
+    // PouchDB.sync Options
     sync: {
       live:  true,
       retry: true,
@@ -48,27 +78,21 @@ const bucket = new VuePouch.Bucket({
       }
     },
 
+    // db.changes({ options })
     changes: {
-      since: 0,
+      since: 'now',
       live: true,
       include_docs: true
     },
 
-    onChange(data) {
-      console.log(data);
-    },
-
+    // db.changes().on($events)
+    onChanges() {},
     onPaused() {},
-
     onActive() {},
-
     onDenied() {},
-
     onComplete() {},
-
     onError() {},
-
-    cancel(syncRef) {}
+    cancel(cancel) {}
   }
 });
 
@@ -81,6 +105,12 @@ window.onload = function () {
     el: `#app`,
 
     bucket,
+
+    computed: {
+      projects() {
+        return this.$bucket.state.projects;
+      }
+    },
 
     methods: {
 

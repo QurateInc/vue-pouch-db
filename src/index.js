@@ -1,10 +1,20 @@
 /**
- * Local Plugins
+ * Importing
  */
 import PouchDB from 'pouchdb-browser';
 
-// Global Vue reference
+/**
+ * Global Vue reference
+ */
 let Vue;
+
+/**
+ * Utilities
+ */
+import {
+  noop,
+  binarySearch
+} from './utils';
 
 /**
  * Bucket Class
@@ -26,17 +36,6 @@ class Bucket {
     // Internal Variables
     this._dbs   = {};
     this._state = {};
-
-    // Maybe later!
-    this._vms = new Vue({data() {
-      const dataSchema = {};
-      for (const dbname in schema) {
-        if (schema.hasOwnProperty(dbname) && ignoredKeys.indexOf(dbname) === -1) {
-          dataSchema[dbname] = {};
-        }
-      }
-      return dataSchema;
-    }});
 
     // Local Variables
     if (!schema.config) {
@@ -67,12 +66,31 @@ class Bucket {
     }
   }
 
-  /**
-   * Referencing internal state
-   * @returns {Object}
-   */
-  get state() {
-    return this._vms.$data;
+  // Delete Object from _state
+  _deleted(dbname, docID) {
+    const index = binarySearch(this._state[dbname], docID);
+    const doc   = this._state[dbname][index];
+
+    if (doc && doc._id === docID) {
+      // Delete
+      this._state[dbname].splice(index, 1);
+    }
+  }
+
+  // Update or insert state in object
+  _upsert(dbname, newDoc) {
+    const index = binarySearch(this._state[dbname], newDoc._id);
+    const doc   = this._state[dbname][index];
+
+    if (doc && doc._id === newDoc._id) {
+      // Update
+      Vue.set(this._state[dbname], index, newDoc);
+    } else {
+      // Insert an Empty object to reserve the index
+      this._state[dbname].splice(index, 0, {});
+      // Set the reactive data
+      Vue.set(this._state[dbname], index, newDoc);
+    }
   }
 
   /**
@@ -83,6 +101,7 @@ class Bucket {
    * @private
    */
   _initDB(dbname, config = {}) {
+
     // If DB Exists return it
     if (this._dbs[dbname]) {
       return this._dbs[dbname];
@@ -101,8 +120,8 @@ class Bucket {
     this._dbs[dbname] = new PouchDB(dbname, config.options);
 
     // Populate state with data
-    this._dbs[dbname].allDocs({ include_docs: true }).then((data) => {
-      return Vue.set(this._state, dbname, data);
+    this._dbs[dbname].allDocs(config.allDocs).then((data) => {
+      return Vue.set(this._state, dbname, data.rows.map((row) => row.doc));
     });
 
     // Sync DB
@@ -110,29 +129,32 @@ class Bucket {
       dbname,
       `${config.remote}/${dbname}`,
       config.sync
-    ).on("change", (state) => {
-      state.change.docs.forEach((changedDoc) => {
-        this._state[dbname].rows.forEach((doc, index) => {
-          if (doc.id === changedDoc._id) {
-            // We don't need Revisions here!
-            delete changedDoc._revisions;
+    );
 
-            // Setting Reactivity and updating the DB
-            Vue.set(this._state[dbname].rows, index, {
-              id: changedDoc._id,
-              key: changedDoc._id,
-              value: {
-                rev: changedDoc._rev
-              },
-              doc: changedDoc
-            });
-          }
-        });
-      });
-    });
+    // Start detecting changes
+    this._initChanges(dbname, config);
 
     // Return instance
     return this._dbs[dbname];
+  }
+
+  _initChanges(dbname, config) {
+    // Detect Changes and update the _state tree
+    const dbChanges = this._dbs[dbname].changes(config.changes).on("change", (change) => {
+      if (change.deleted) {
+        this._deleted(dbname, change.id);
+      } else {
+        this._upsert(dbname, change.doc);
+      }
+      return config.onChanges && config.onChanges(change);
+    })
+    .on('error', config.onError || noop)
+    .on('paused', config.onPaused || noop)
+    .on('active', config.onActive || noop)
+    .on('denied', config.onDenied || noop)
+    .on('complete', config.onComplete || noop);
+
+    return config.cancel && config.cancel(dbChanges.cancel);
   }
 
   /**
@@ -141,6 +163,14 @@ class Bucket {
    * @param config
    * @returns {*}
    */
+  get state() {
+    return this._state;
+  }
+
+  set state(value) {
+    throw new Error("[Vue Pouch]: Do not replace the entire state!");
+  }
+
   db(dbname, config) {
     return this._initDB(dbname, config);
   }
@@ -209,6 +239,6 @@ export default {
 };
 
 // Making PouchDB Available for Debugging
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV !== "production") {
   window.PouchDB = PouchDB;
 }
