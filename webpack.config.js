@@ -9,28 +9,28 @@ let webpack = require('webpack');
  */
 module.exports = {
   entry: {
-    build: './build.js'
+    build: './src/index.js'
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: '[name].js'
+    filename: '[name].js',
+    library: "vue-pouch-db",
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
-    rules: [
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
-      }
-    ]
+    rules: [{
+      test: /\.js$/,
+      loader: 'babel-loader',
+      exclude: /node_modules/
+    }]
   },
   devtool: 'eval-source-map'
 };
 
 if (process.env.NODE_ENV === 'production') {
+  // Source Maps
   module.exports.devtool = 'source-map';
-
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({

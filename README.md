@@ -1,17 +1,5 @@
 # vue-pouch-db
 
-[Vue.js](http://vuejs.com/) plugin that adds [PouchDB](http://pouchdb.com/)
-to your Vue.js apps.
-
-This plugin will cache the instance of the database, and use that connection
-every time you call it inside a component in VueJS.
-
-The connection will also create a "sync" between the remote and local database.
-
-You can close the databases, which will in turn close the connection and
-remove the database from the cache.
-
-Note: The only dependency of the plugin is 'pouchdb-browser'
 
 #### Install
 
@@ -25,14 +13,6 @@ npm install vue-pouch-db --save
 
 ```
 import VuePouch from 'vue-pouch-db';
-
-Vue.use(VuePouch, {
-  remote: "http://localhost:5984",
-  sync: {
-    live:  true,
-    retry: true
-  }
-});
 ```
 
 ## API
