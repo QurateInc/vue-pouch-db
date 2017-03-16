@@ -5,7 +5,7 @@
 ---
 
 Vue Pouch DB is a VueJS Plugin that binds PouchDB with Vue and keeps
-a synchronised Offline First state with the database.
+a synchronised state with the database.
 
 Has support for Mango queries which are processed locally within
 the VuePouchDB state.
