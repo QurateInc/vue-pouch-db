@@ -1,8 +1,10 @@
 {
   "name": "vue-pouch-db",
-  "version": "2.0.0",
-  "description": "Vue bindings for PouchDB with internal reactive state and Mango Queries",
-  "repository": "https://github.com/sadiqevani/vue-pouch-db.git",
+  "version": "2.0.1",
+  "description": "Vue Pouch DB is a VueJS Plugin that binds PouchDB with Vue and keeps a synchronised state with the database. Has support for Mango queries which are processed locally within the VuePouchDB state. Edit",
+  "repository": "https://github.com/QurateInc/vue-pouch-db",
+  "author": "Sadi Qevani",
+  "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "test": "mocha",
@@ -26,8 +28,6 @@
     "pwa",
     "reactive"
   ],
-  "author": "Sadi Qevani",
-  "license": "MIT",
   "dependencies": {
     "lodash.debounce": "^4.0.8",
     "lodash.merge": "^4.6.0",
