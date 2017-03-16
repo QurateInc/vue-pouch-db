@@ -10,7 +10,7 @@ the VuePouchDB state.
 
 Install from NPM:
 
-```
+```javascript
 npm install vue-pouch-db --save
 ```
 
@@ -18,7 +18,7 @@ npm install vue-pouch-db --save
 
 Import the Library and Install it into the Vue Instance
 
-```
+```javascript
 // Import the Library
 import VuePouch from 'vue-pouch-db';
 
@@ -37,7 +37,7 @@ Currently the following keys are plugin specific:
 * plugins // List of PouchDB Plugins
 * actions // Custom methods, that share the "this" internal object of VuePouchDB
 
-```
+```javascript
 // Bucket - Vue Pouch DB Config Object
 // This is a general and fast overview
 // How to define bucket initially in the instance
@@ -168,6 +168,6 @@ const app = new Vue({
 ##### this.$bucket
 
 ###### Example
-```
+```javascript
 ```
 -----
