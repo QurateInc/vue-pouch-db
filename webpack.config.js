@@ -3,7 +3,6 @@
  */
 let path    = require('path');
 let webpack = require('webpack');
-let dotenv  = require('dotenv').config();
 
 /**
  * Build
