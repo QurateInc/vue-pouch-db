@@ -119,6 +119,11 @@ const bucket = new VuePouchDB.Bucket({
     require('pouchdb-plugin')
   ],
 
+  // Actions are shared across the
+  // bucket instance.
+  // Think of them as helper methods to bundle
+  // several sets of commands into a single method.
+  // Can be accessed through this.$bucket.[method name]
   actions: {
     addDoc(arg) {
       // this is $bucket instance
@@ -142,7 +147,7 @@ const bucket = new VuePouchDB.Bucket({
     remoteOnly: true
   },
 
-  // projects -> Database Name, ex: couchdb.com/projects
+  // 'projects' key -> Database Name, ex: couchdb.com/projects
   projects: {
     // PouchDB.sync Options
     sync: {
@@ -185,16 +190,16 @@ For more information regarding the configuration objects, please check
 
 ## API
 
-##### this.$bucket
+#### - this.$bucket
 
 ###### Example
 ```javascript
 ```
 -----
 
-##### this.dbsetup
+#### - this.dbsetup
 
-Vue({ dbsetup: {} }) is a shorthand method to instantiate a database within
+`Vue({ dbsetup: {} })` is a shorthand method to instantiate a database within
 a component, or to have it referenced internally, without the need to
 call a method or predefine it in the Bucket config object.
 
@@ -219,7 +224,7 @@ Vue.component({
 ```
 -----
 
-##### mapQueries({})
+#### - mapQueries({})
 
 mapQueries is a functionality built on top of VuePouchDB, which
 takes the database state and filters it. It mainly works with
@@ -228,6 +233,11 @@ to do the querying of the documents.
 
 ###### Example
 ```javascript
+
+// Import mapQueries method
+import { mapQueries } from 'vue-pouch-db';
+
+// Inside a Vue component
 Vue.component({
   template: `<div>{{ this.docs }}, {{ this.files }}</div>`,
   data: function {
@@ -278,4 +288,27 @@ Vue.component({
   }
 });
 ```
+
 -----
+
+MIT License
+
+Copyright (c) 2017 Sadi Qevani
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
