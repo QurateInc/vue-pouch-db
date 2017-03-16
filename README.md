@@ -186,7 +186,7 @@ const app = new Vue({
 ```
 
 For more information regarding the configuration objects, please check
-[PouchDB API](https://pouchdb.com/api.html)
+_*[PouchDB API](https://pouchdb.com/api.html)*_
 
 ## API
 
@@ -205,7 +205,7 @@ Vue.component({
     // Programmatic way to instantiate a database
     // This is the same as setting up dbsetup object
     // into the vue component.
-    this.$bucket.db(dbname, option);
+    this.$bucket.db(dbname, options);
 
     // Close a database, and remove all its watchers
     // and events related to it.
@@ -249,7 +249,7 @@ Vue.component({
 
 mapQueries is a functionality built on top of VuePouchDB, which
 takes the database state and filters it. It mainly works with
-Mango queries, and uses [sift](https://github.com/crcn/sift.js) library
+Mango queries, and uses _*[sift](https://github.com/crcn/sift.js)*_ library
 to do the querying of the documents.
 
 ###### Example
