@@ -1,36 +1,26 @@
 /**
  * Assert Library
  */
-var assert = require('assert');
+var assert     = require('assert');
+var Vue        = require("../node_modules/vue/dist/vue.common");
+var VuePouchDB = require("../dist/index");
 
 /**
- * Libraries
+ * Plugins
  */
-var Vue      = require("vue");
-var VuePouch = require("../index");
-
-Vue.use(VuePouch, {
-  remote: "http://localhost:5984",
-  sync: {
-    live: true,
-    retry: true
-  }
-});
+Vue.use(VuePouchDB);
 
 /**
  * Tests
  */
-describe('vue-pouch-db', function() {
-  describe('#Vue.use(VuePouch, {})', function() {
+describe('Vue Pouch DB', function() {
+
+  describe('#Vue.use(VuePouchDB)', function() {
+
     it("should be defined", function () {
       assert(Vue);
-      assert(VuePouch);
+      assert(VuePouchDB);
     });
 
-    it("should define bindings for vue", function () {
-      assert(Vue.prototype.$db);
-      assert(Vue.prototype.$dbs);
-      assert(Vue.prototype.$removedb);
-    });
   });
 });

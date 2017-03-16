@@ -2,13 +2,13 @@
 import Vue from 'vue/dist/vue.common';
 
 // Plugin
-import VuePouch from './src/index';
+import VuePouchDB from './src/index';
 
 // VuePouch
-Vue.use(VuePouch);
+Vue.use(VuePouchDB);
 
 // Bucket
-const bucket = new VuePouch.Bucket({
+const bucket = new VuePouchDB.Bucket({
   config: {
     // Remote Server
     remote: "https://db.qurate.site:6984",
@@ -74,6 +74,7 @@ const bucket = new VuePouch.Bucket({
     // Is remote only ?
     remoteOnly: true
   },
+
   projects: {
     // PouchDB.sync Options
     sync: {

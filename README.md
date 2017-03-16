@@ -1,4 +1,4 @@
-# vue-pouch-db
+# Vue Pouch DB
 
 
 #### Install
@@ -12,7 +12,11 @@ npm install vue-pouch-db --save
 ## Usage
 
 ```
+// Import the Library
 import VuePouch from 'vue-pouch-db';
+
+// VuePouchDB Instance
+Vue.use(VuePouchDB);
 ```
 
 ## API

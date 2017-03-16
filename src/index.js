@@ -46,17 +46,13 @@ class Bucket {
     this._state = {};
 
     // Throw Error if Global Config not defined
-    if (!schema.config) {
-      throw new Error('[VuePouch]: Global Config is not declared in the upper level!');
-    }
+    if (!schema.config) throw new Error('[VuePouchDB]: Global Config is not declared in the upper level!');
 
     // Referencing Actions to the $bucket
-    if (schema.actions) {
-      merge(this, schema.actions);
-    }
+    if (schema.actions) merge(this, schema.actions);
 
     // Init PouchDB plugins
-    if ((schema.plugins.constructor === Array) && (schema.plugins.length > 0)) {
+    if (Array.isArray(schema.plugins) && (schema.plugins.length > 0)) {
       for (let i = 0; i < schema.plugins.length; i += 1) {
         PouchDB.plugin(schema.plugins[i]);
       }
@@ -66,7 +62,6 @@ class Bucket {
     Object.keys(schema).forEach((dbname) => {
       // If is ignored Key, skip!
       if (ignoredKeys.indexOf(dbname) !== -1)  return null;
-
       // Initialize the DB
       return this._initDB(dbname, merge(
         {},
@@ -190,10 +185,13 @@ class Bucket {
     // Calling the Cancel function
     config.cancel && config.cancel(dbChanges.cancel);
 
+    // Set Max Listeners
+    dbChanges.setMaxListeners(1000);
+
     // Reference all Subscriptions
     this._watch[dbname] = dbChanges;
 
-    // Returing the Watch
+    // Returning the Watch
     return this._watch[dbname];
   }
 
@@ -209,11 +207,10 @@ class Bucket {
    */
   set state(value) {
     console.error(
-      `[VuePouch]: Do not replace the entire state! 
-       VuePouch takes care of the updates internally, 
+      `[VuePouchDB]: Do not replace the entire state! 
+       VuePouchDB takes care of the updates internally, 
        change the DB instead!`
     );
-    // Return Undefined
     return undefined;
   }
 
@@ -274,11 +271,7 @@ export default {
   install($Vue) {
 
     // Checking if Vue is Installed
-    if (Vue) {
-      throw new Error(
-        '[VuePouch] already installed. Vue.use(VuePouch) should be called only once.'
-      );
-    }
+    if (Vue) throw new Error('[VuePouchDB] already installed. Vue.use(VuePouchDB) should be called only once.');
 
     // Making Vue globally available
     Vue = $Vue;
@@ -361,7 +354,7 @@ export default {
         beforeDestroy: dbDestroy
       });
     } else {
-      // override init and inject VuePouch init procedure
+      // override init and inject VuePouchDB init procedure
       // for 1.x backwards compatibility.
       const _init = Vue.prototype._init;
       // Initializing the bucket

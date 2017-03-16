@@ -3,16 +3,17 @@
  */
 let path    = require('path');
 let webpack = require('webpack');
+let dotenv  = require('dotenv').config();
 
 /**
  * Build
  */
 module.exports = {
   entry: {
-    build: './src/index.js'
+    index: './src/index.js'
   },
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve('dist'),
     filename: '[name].js',
     library: "vue-pouch-db",
     libraryTarget: 'umd',
@@ -20,11 +21,16 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.js$/,
       loader: 'babel-loader',
+      test: /\.js$/,
       exclude: /node_modules/
     }]
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }
+    })
+  ],
   devtool: 'eval-source-map'
 };
 
@@ -33,16 +39,8 @@ if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = 'source-map';
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
+      compress: { warnings: false }
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
