@@ -1,5 +1,7 @@
 # Vue Pouch DB
 
+![Vue Pouch DB](http://i.imgur.com/rFwZVhr.png)
+
 Vue Pouch DB is a VueJS Plugin that binds PouchDB with Vue and keeps
 a synchronised Offline First state with the database.
 
@@ -10,7 +12,7 @@ the VuePouchDB state.
 
 Install from NPM:
 
-```javascript
+```
 npm install vue-pouch-db --save
 ```
 
