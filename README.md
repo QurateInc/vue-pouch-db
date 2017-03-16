@@ -2,10 +2,12 @@
 
 ![Vue Pouch DB](http://i.imgur.com/rFwZVhr.png)
 
+---
+
 Vue Pouch DB is a VueJS Plugin that binds PouchDB with Vue and keeps
 a synchronised Offline First state with the database.
 
-Also has support for Mango queries which are processed locally within
+Has support for Mango queries which are processed locally within
 the VuePouchDB state.
 
 #### Install
@@ -28,16 +30,19 @@ import VuePouch from 'vue-pouch-db';
 Vue.use(VuePouchDB);
 ```
 
-## VuePouchDB Bucket
+## Vue Pouch DB Bucket
 
 The bucket is a global config object (schema), that you can set
-specific rules globally or per database.
+configurations globally or per database.
 
-Currently the following keys are plugin specific:
+Currently the following keys are plugin specific, these keys have specific
+ functionality in the Bucket Config Object:
 
-* config // Main config Object anything here will be passed by default to each DB instance
-* plugins // List of PouchDB Plugins
-* actions // Custom methods, that share the "this" internal object of VuePouchDB
+* config
+* plugins
+* actions
+
+---
 
 ```javascript
 // Bucket - Vue Pouch DB Config Object
@@ -114,6 +119,16 @@ const bucket = new VuePouchDB.Bucket({
     require('pouchdb-plugin')
   ],
 
+  actions: {
+    addDoc(arg) {
+      // this is $bucket instance
+      this.db('projects').({
+        _id: 'document_id'
+        data: {}
+      }, function () {});
+    }
+  }
+
   // Databases
   // You can define / instanciate
   // a per database config file.
@@ -165,11 +180,102 @@ const app = new Vue({
 });
 ```
 
+For more information regarding the configuration objects, please check
+[PouchDB API](https://pouchdb.com/api.html)
+
 ## API
 
 ##### this.$bucket
 
 ###### Example
 ```javascript
+```
+-----
+
+##### this.dbsetup
+
+Vue({ dbsetup: {} }) is a shorthand method to instantiate a database within
+a component, or to have it referenced internally, without the need to
+call a method or predefine it in the Bucket config object.
+
+###### Example
+```javascript
+Vue.component({
+  dbsetup: {
+    // the database name
+    // both keys can take a function
+    // that is bound to the component
+    // instance
+    name: "dbname",
+    // the config object
+    // When a database is created the "options"
+    // key is taken from the context and applied
+    // to the database.
+    // Note: does not work for already instantiated
+    // databases.
+    options: {}
+  }
+});
+```
+-----
+
+##### mapQueries({})
+
+mapQueries is a functionality built on top of VuePouchDB, which
+takes the database state and filters it. It mainly works with
+Mango queries, and uses [sift](https://github.com/crcn/sift.js) library
+to do the querying of the documents.
+
+###### Example
+```javascript
+Vue.component({
+  template: `<div>{{ this.docs }}, {{ this.files }}</div>`,
+  data: function {
+    return {
+        dbname: 'projects'
+    };
+  },
+  dbsetup: {
+    name: function () {
+      // 'this' is bound to the component
+      // internal state
+      return {
+        this.dbname;
+      };
+    },
+    options: function () {
+      return {};
+    }
+  },
+  computed: {
+    ...mapQueries({
+      docs: {
+        type: 'anode'
+      },
+      files: function () {
+        return {
+          file: {
+            $in: ['file']
+          }
+        };
+      }
+    })
+  },
+  methods: {
+    addDocs: function (_id, data) {
+      // You can modify the state
+      // internally by assigning data
+      // to the internal computed properties
+      // and it will update the database automatically
+      // Can be an object or an Array of items you
+      // would like to update.
+      this.docs = {
+        _id: _id,
+        type: 'anode',
+        data: data
+      };
+    }
+  }
+});
 ```
 -----
