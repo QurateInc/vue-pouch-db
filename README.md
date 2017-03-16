@@ -35,8 +35,8 @@ Vue.use(VuePouchDB);
 The bucket is a global config object (schema), that you can set
 configurations globally or per database.
 
-Currently the following keys are plugin specific, these keys have specific
- functionality in the Bucket Config Object:
+Currently the following keys are plugin specific, these keys have
+specific functionality in the Bucket Config Object:
 
 * config
 * plugins
@@ -185,8 +185,8 @@ const app = new Vue({
 });
 ```
 
-For more information regarding the configuration objects, please check
-_*[PouchDB API](https://pouchdb.com/api.html)*_
+**For more information regarding the configuration objects, please check
+[PouchDB API](https://pouchdb.com/api.html)**
 
 ## API
 
@@ -248,9 +248,10 @@ Vue.component({
 #### mapQueries({})
 
 mapQueries is a functionality built on top of VuePouchDB, which
-takes the database state and filters it. It mainly works with
-Mango queries, and uses _*[sift](https://github.com/crcn/sift.js)*_ library
-to do the querying of the documents.
+takes the database state and filters it.
+
+**It mainly works with Mango queries, and uses _*[sift](https://github.com/crcn/sift.js)*_ library
+to do the querying of the documents.**
 
 ###### Example
 ```javascript
