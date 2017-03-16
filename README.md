@@ -190,14 +190,35 @@ For more information regarding the configuration objects, please check
 
 ## API
 
-#### - this.$bucket
+#### this.$bucket
 
 ###### Example
 ```javascript
+Vue.component({
+  created: {
+    // Access the internal VuePouchDB state
+    // the internal state is reactive, and any mingling
+    // with the state may break the plugin. As it wont
+    // be able to track changes.
+    this.$bucket.state;
+
+    // Programmatic way to instantiate a database
+    // This is the same as setting up dbsetup object
+    // into the vue component.
+    this.$bucket.db(dbname, option);
+
+    // Close a database, and remove all its watchers
+    // and events related to it.
+    // Internally it will close the DB, delete the internal
+    // state (not the indexDB database locally)
+    // remove all the change watchers.
+    this.$bucket.closedb(dbname);
+  }
+});
 ```
 -----
 
-#### - this.dbsetup
+#### this.dbsetup
 
 `Vue({ dbsetup: {} })` is a shorthand method to instantiate a database within
 a component, or to have it referenced internally, without the need to
@@ -224,7 +245,7 @@ Vue.component({
 ```
 -----
 
-#### - mapQueries({})
+#### mapQueries({})
 
 mapQueries is a functionality built on top of VuePouchDB, which
 takes the database state and filters it. It mainly works with
