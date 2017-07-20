@@ -22,7 +22,7 @@ Import the Library and Install it into the Vue Instance
 
 ```javascript
 // Import the Library
-import VuePouch from 'vue-pouch-db';
+import VuePouchDB from 'vue-pouch-db';
 
 // VuePouchDB Instance
 Vue.use(VuePouchDB);
