@@ -176,7 +176,7 @@ class Bucket {
           }
         });
       }
-      return config.onComplete || config.onComplete(complete);
+      return config.onComplete && config.onComplete(complete);
     }).on('error', config.onError || noop)
     .on('paused', config.onPaused || noop)
     .on('active', config.onActive || noop)
